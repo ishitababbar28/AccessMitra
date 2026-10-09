@@ -1,0 +1,274 @@
+/* ==========================================================================
+   AccessMitra - Accessibility Enhancements & Specialized View Modes
+   Compliant with WCAG 2.1 AAA & Guidelines for Indian Government Websites (GIGW)
+   ========================================================================== */
+
+/* 1. Screen Reader Utilities */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.sr-only-focusable:focus {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 12px 18px !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  background: #ea580c !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  z-index: 10000 !important;
+}
+
+/* 2. Enhanced Keyboard Focus Rings (WCAG 2.4.7 & 2.4.11) */
+*:focus-visible {
+  outline: 3px solid #ea580c !important;
+  outline-offset: 3px !important;
+  border-radius: 4px !important;
+}
+
+/* 3. Font Size Scaling Classes */
+html.font-base {
+  --font-scale-factor: 1;
+}
+
+html.font-lg {
+  --font-scale-factor: 1.15;
+}
+
+html.font-xl {
+  --font-scale-factor: 1.30;
+}
+
+/* 4. Dyslexia-Friendly Reading Mode */
+body.font-dyslexia {
+  font-family: 'Comic Sans MS', 'Trebuchet MS', 'Arial', sans-serif !important;
+  letter-spacing: 0.08em !important;
+  word-spacing: 0.18em !important;
+  line-height: 1.9 !important;
+}
+
+body.font-dyslexia p,
+body.font-dyslexia li,
+body.font-dyslexia a,
+body.font-dyslexia button {
+  letter-spacing: 0.08em !important;
+  word-spacing: 0.18em !important;
+  line-height: 1.9 !important;
+}
+
+/* 5. High Contrast Dark Mode */
+body.theme-dark-contrast {
+  --bg-gradient-start: #090d16;
+  --bg-gradient-end: #04070e;
+  --surface-white: #111827;
+  --surface-card: #1f2937;
+  --surface-subtle: #374151;
+  --text-main: #f9fafb;
+  --text-muted: #d1d5db;
+  --text-subtle: #9ca3af;
+  --border-light: #374151;
+  --border-strong: #4b5563;
+  --primary-navy: #f3f4f6;
+  --primary-blue: #60a5fa;
+  --primary-blue-hover: #93c5fd;
+  color: #f9fafb;
+  background: #090d16;
+}
+
+body.theme-dark-contrast .main-header {
+  background: #111827;
+  border-color: #374151;
+}
+
+body.theme-dark-contrast .scheme-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+body.theme-dark-contrast .search-filter-card {
+  background: #111827;
+  border-color: #374151;
+}
+
+body.theme-dark-contrast .search-input {
+  background: #1f2937;
+  color: #f9fafb;
+  border-color: #4b5563;
+}
+
+body.theme-dark-contrast .modal-window {
+  background: #111827;
+  color: #f9fafb;
+}
+
+body.theme-dark-contrast .modal-header,
+body.theme-dark-contrast .modal-footer {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+/* 6. High Contrast Yellow-on-Black (WCAG AAA for Low Vision / Macular Degeneration) */
+body.theme-yellow-contrast {
+  background: #000000 !important;
+  color: #ffff00 !important;
+  --bg-gradient-start: #000000;
+  --bg-gradient-end: #000000;
+  --surface-white: #000000;
+  --surface-card: #050505;
+  --surface-subtle: #111111;
+  --text-main: #ffff00;
+  --text-muted: #ffff80;
+  --text-subtle: #ffffff;
+  --border-light: #ffff00;
+  --border-strong: #ffffff;
+  --primary-navy: #ffff00;
+  --primary-blue: #00ffff;
+  --primary-blue-hover: #ffffff;
+}
+
+body.theme-yellow-contrast * {
+  border-color: #ffff00 !important;
+  color: #ffff00 !important;
+  box-shadow: none !important;
+}
+
+body.theme-yellow-contrast .main-header,
+body.theme-yellow-contrast .scheme-card,
+body.theme-yellow-contrast .search-filter-card,
+body.theme-yellow-contrast .modal-window,
+body.theme-yellow-contrast .accessibility-bar {
+  background: #000000 !important;
+  border: 2px solid #ffff00 !important;
+}
+
+body.theme-yellow-contrast a,
+body.theme-yellow-contrast .btn-card-details,
+body.theme-yellow-contrast .search-action-btn,
+body.theme-yellow-contrast .btn-primary-large {
+  background: #000000 !important;
+  color: #00ffff !important;
+  border: 2px solid #00ffff !important;
+}
+
+body.theme-yellow-contrast a:hover,
+body.theme-yellow-contrast button:hover {
+  background: #ffff00 !important;
+  color: #000000 !important;
+}
+
+body.theme-yellow-contrast *:focus-visible {
+  outline: 4px solid #ffffff !important;
+}
+
+/* 7. Reading Guide Line (Horizontal Ruler for Visual Tracking / ADHD / Reading Assistance) */
+#reading-guide-ruler {
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  height: 4px;
+  background: #ea580c;
+  box-shadow: 0 0 10px rgba(234, 88, 12, 0.7);
+  pointer-events: none;
+  z-index: 99999;
+  display: none;
+  transition: top 0.05s ease-out;
+}
+
+#reading-guide-ruler.active {
+  display: block;
+}
+
+/* 8. Text-to-Speech Sticky Bar */
+.tts-floating-panel {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: var(--border-radius-pill);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  border: 2px solid #38bdf8;
+  animation: slideUp 0.3s ease;
+}
+
+.tts-panel-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #38bdf8;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tts-btn {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.tts-btn:hover {
+  background: #ea580c;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 9. Keyboard Shortcuts Overlay Modal */
+.shortcuts-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.shortcuts-table th,
+.shortcuts-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.shortcuts-table th {
+  background: var(--surface-subtle);
+  font-weight: 700;
+  color: var(--primary-navy);
+}
+
+.kbd-key {
+  display: inline-block;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 2px 7px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found - AccessMitra{% endblock %}
+
+{% block content %}
+<div class="content-section" style="padding: 80px 24px; text-align: center;">
+  <div style="background: var(--surface-white); border-radius: var(--border-radius-lg); border: 1px solid var(--border-light); padding: 50px 24px; max-width: 600px; margin: 0 auto; box-shadow: var(--shadow-md);">
+    <div style="font-size: 3.5rem; margin-bottom: 16px;">🔍</div>
+    <h1 style="font-family: var(--font-heading); font-size: 2rem; color: var(--primary-navy); margin-bottom: 12px;">
+      Page or Scheme Not Found
+    </h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem; margin-bottom: 28px; line-height: 1.6;">
+      {{ message or "The requested resource could not be located. It might have been updated or moved." }}
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+      <a href="{{ url_for('index') }}" class="btn-primary-large">
+        Return to Scheme Explorer
+      </a>
+      <a href="{{ url_for('helplines_page') }}" class="btn-secondary-large" style="color: var(--text-main);">
+        Emergency Helplines
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

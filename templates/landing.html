@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}AccessMitra | Your Gateway to Accessible Government Support{% endblock %}
+
+{% block content %}
+<section class="landing-hero" aria-labelledby="landing-title">
+  <div class="landing-hero-pattern" aria-hidden="true"></div>
+  <div class="landing-hero-inner">
+    <div class="landing-hero-copy">
+      <span class="hero-badge-pill"><span aria-hidden="true">🇮🇳</span> A simpler path to public support</span>
+      <h2 id="landing-title">Find the support you need. <span>Move forward with confidence.</span></h2>
+      <p>AccessMitra brings verified government schemes, trusted helplines, and accessibility resources into one clear, welcoming place for every Divyangjan and their families.</p>
+      <div class="landing-hero-actions">
+        <a href="{{ url_for('wizard_page') }}" class="btn-primary-large">Find My Schemes <span aria-hidden="true">→</span></a>
+        <a href="{{ url_for('schemes_page') }}" class="btn-secondary-large">Explore Schemes <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="landing-trust-row" aria-label="AccessMitra highlights">
+        <span><strong>{{ total_schemes }}+</strong> verified schemes</span>
+        <span><strong>{{ total_helplines }}</strong> trusted helplines</span>
+        <span><strong>100%</strong> official sources</span>
+      </div>
+    </div>
+    <div class="landing-hero-visual">
+      <div class="landing-image-frame">
+        <img src="{{ url_for('static', filename='images/hero_banner.jpg') }}" alt="People with disabilities using accessible public services and technology">
+      </div>
+      <div class="landing-visual-note"><span aria-hidden="true">✓</span><div><strong>Clear information</strong><small>Built for real-life decisions</small></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="landing-section landing-features" aria-labelledby="features-title">
+  <div class="landing-section-heading">
+    <span class="section-kicker">One trusted starting point</span>
+    <h2 id="features-title">Everything you need to take the next step.</h2>
+    <p>Whether you are searching for financial support, urgent guidance, or tools that make digital services easier to use, AccessMitra keeps the essentials close.</p>
+  </div>
+  <div class="feature-card-grid">
+    <a href="{{ url_for('schemes_page') }}" class="landing-feature-card feature-schemes">
+      <span class="feature-icon" aria-hidden="true">▦</span><span class="feature-number">01</span>
+      <h3>Government Schemes</h3><p>Understand eligibility, benefits, documents, and official application steps without the guesswork.</p><span class="feature-link">Browse schemes <span aria-hidden="true">→</span></span>
+    </a>
+    <a href="{{ url_for('helplines_page') }}" class="landing-feature-card feature-helplines">
+      <span class="feature-icon" aria-hidden="true">☎</span><span class="feature-number">02</span>
+      <h3>Helplines</h3><p>Reach verified national and departmental support lines when you need a human voice.</p><span class="feature-link">Find help <span aria-hidden="true">→</span></span>
+    </a>
+    <a href="{{ url_for('rights_page') }}" class="landing-feature-card feature-rights">
+      <span class="feature-icon" aria-hidden="true">◈</span><span class="feature-number">03</span>
+      <h3>Rights & Accessibility</h3><p>Learn your rights and discover resources designed to make services more inclusive.</p><span class="feature-link">Know your rights <span aria-hidden="true">→</span></span>
+    </a>
+  </div>
+</section>
+
+<section class="landing-section how-it-works" aria-labelledby="how-title">
+  <div class="landing-section-heading compact-heading">
+    <span class="section-kicker">How it works</span>
+    <h2 id="how-title">From question to next step, simply.</h2>
+  </div>
+  <div class="steps-row">
+    <div class="step-item"><span class="step-number">1</span><div><h3>Tell us what you need</h3><p>Share a few details about your age, disability, income, and priority.</p></div></div>
+    <div class="step-item"><span class="step-number">2</span><div><h3>See relevant options</h3><p>Explore clear matches and compare benefits, eligibility, and requirements.</p></div></div>
+    <div class="step-item"><span class="step-number">3</span><div><h3>Take action</h3><p>Use verified links and practical guidance to start your application.</p></div></div>
+  </div>
+</section>
+
+<section class="landing-final-cta" aria-labelledby="final-cta-title">
+  <div><span class="section-kicker">Your next step starts here</span><h2 id="final-cta-title">Support should feel easier to reach.</h2><p>Start with a guided search or browse the full AccessMitra directory.</p></div>
+  <div class="landing-final-actions"><a href="{{ url_for('wizard_page') }}" class="btn-primary-large">Get Started <span aria-hidden="true">→</span></a><a href="{{ url_for('schemes_page') }}" class="landing-text-link">View all schemes</a></div>
+</section>
+{% endblock %}

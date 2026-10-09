@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block title %}Smart Scheme Eligibility Calculator - AccessMitra{% endblock %}
+
+{% block content %}
+<div class="content-section" style="padding-top: 40px; max-width: 900px;">
+  <!-- Header -->
+  <div style="text-align: center; margin-bottom: 36px;">
+    <span style="background: #eff6ff; color: #1d4ed8; font-weight: 800; font-size: 0.85rem; padding: 6px 16px; border-radius: 9999px; text-transform: uppercase;">
+      Official Rules-Based Engine
+    </span>
+    <h1 style="font-family: var(--font-heading); font-size: 2.3rem; font-weight: 800; color: var(--primary-navy); margin-top: 12px; margin-bottom: 8px;">
+      Divyangjan Scheme Eligibility Calculator
+    </h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 650px; margin: 0 auto;">
+      Answer 4 quick questions about your disability status, age, and household income to instantly discover all Indian central and state welfare benefits you qualify for.
+    </p>
+  </div>
+
+  <!-- Wizard Step Container -->
+  <div class="search-filter-card" id="wizard-step-card" style="padding: 36px; box-shadow: var(--shadow-xl);">
+    <!-- Progress Indicator -->
+    <div style="margin-bottom: 30px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span id="wizard-step-indicator" style="font-weight: 700; color: var(--primary-navy); font-size: 0.9rem;">Step 1 of 4</span>
+        <span style="font-size: 0.82rem; color: var(--text-subtle);">Confidential & Instant</span>
+      </div>
+      <div style="height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+        <div id="wizard-progress-fill" style="height: 100%; width: 0%; background: linear-gradient(90deg, #ea580c 0%, #1d4ed8 100%); transition: width 0.3s ease;"></div>
+      </div>
+    </div>
+
+    <!-- Wizard Form -->
+    <form id="eligibility-wizard-form">
+      <!-- Step 1: Disability Type -->
+      <div class="wizard-step-panel" id="wizard-step-1">
+        <h2 style="font-size: 1.35rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 8px;">
+          Question 1: What is your primary disability category?
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+          Select the category matching your UDID card or medical certificate under RPwD Act 2016.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 32px;">
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition-smooth);" class="wizard-tile">
+            <input type="radio" name="disability_type" value="Locomotor Disability" checked style="width: 18px; height: 18px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary-navy);">Locomotor / Physical</div>
+              <div style="font-size: 0.75rem; color: var(--text-subtle);">Orthopaedic, amputation, polio</div>
+            </div>
+          </label>
+
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition-smooth);" class="wizard-tile">
+            <input type="radio" name="disability_type" value="Visual Impairment" style="width: 18px; height: 18px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary-navy);">Visual Impairment</div>
+              <div style="font-size: 0.75rem; color: var(--text-subtle);">Blindness or Low vision</div>
+            </div>
+          </label>
+
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition-smooth);" class="wizard-tile">
+            <input type="radio" name="disability_type" value="Hearing Impairment" style="width: 18px; height: 18px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary-navy);">Hearing & Speech</div>
+              <div style="font-size: 0.75rem; color: var(--text-subtle);">Deaf or hard of hearing</div>
+            </div>
+          </label>
+
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition-smooth);" class="wizard-tile">
+            <input type="radio" name="disability_type" value="Autism & Cerebral Palsy" style="width: 18px; height: 18px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary-navy);">Autism / Cerebral Palsy</div>
+              <div style="font-size: 0.75rem; color: var(--text-subtle);">National Trust covered</div>
+            </div>
+          </label>
+
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition-smooth);" class="wizard-tile">
+            <input type="radio" name="disability_type" value="Intellectual & Developmental" style="width: 18px; height: 18px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary-navy);">Intellectual Disability</div>
+              <div style="font-size: 0.75rem; color: var(--text-subtle);">Learning / Cognitive support</div>
+            </div>
+          </label>
+
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 18px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: var(--transition-smooth);" class="wizard-tile">
+            <input type="radio" name="disability_type" value="Multiple Disabilities" style="width: 18px; height: 18px;">
+            <div>
+              <div style="font-weight: 700; color: var(--primary-navy);">Multiple Disabilities</div>
+              <div style="font-size: 0.75rem; color: var(--text-subtle);">Combination of disabilities</div>
+            </div>
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button type="button" class="btn-primary-large" data-wizard-next>
+            Next: Age & Percentage →
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Disability Percentage & Age -->
+      <div class="wizard-step-panel" id="wizard-step-2" style="display: none;">
+        <h2 style="font-size: 1.35rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 8px;">
+          Question 2: What is your disability percentage & age?
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+          Most government schemes mandate 40% benchmark disability, while severe disability pensions typically require 80%+.
+        </p>
+
+        <div style="margin-bottom: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <label for="wizard-pct-slider" style="font-weight: 700; color: var(--primary-navy);">
+              Disability Percentage (as certified):
+            </label>
+            <span id="wizard-pct-output" style="background: #eff6ff; color: #1d4ed8; font-weight: 800; font-size: 1.15rem; padding: 4px 14px; border-radius: 9999px;">
+              40%
+            </span>
+          </div>
+          <input type="range" id="wizard-pct-slider" min="0" max="100" value="40" step="5" style="width: 100%; height: 8px; cursor: pointer;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-subtle); margin-top: 4px;">
+            <span>0%</span>
+            <span>40% (Benchmark)</span>
+            <span>80% (Severe)</span>
+            <span>100%</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 32px;">
+          <label for="wizard-age" style="display: block; font-weight: 700; color: var(--primary-navy); margin-bottom: 8px;">
+            Age of Beneficiary (in Years):
+          </label>
+          <input type="number" id="wizard-age" min="0" max="120" value="24" class="search-input" style="padding: 12px 18px; max-width: 200px;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <button type="button" class="btn-secondary-large" style="color:var(--text-main);" data-wizard-prev>
+            ← Back
+          </button>
+          <button type="button" class="btn-primary-large" data-wizard-next>
+            Next: Family Income →
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Annual Household Income -->
+      <div class="wizard-step-panel" id="wizard-step-3" style="display: none;">
+        <h2 style="font-size: 1.35rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 8px;">
+          Question 3: What is your total family annual income?
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+          Schemes like ADIP and Pre/Post-Matric scholarships give full grants up to certain income thresholds.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 24px;">
+          <button type="button" class="action-pill-btn income-preset-btn active" data-income="90000">
+            Below ₹1.0 Lakh (BPL / Low Income)
+          </button>
+          <button type="button" class="action-pill-btn income-preset-btn" data-income="180000">
+            ₹1.0L - ₹2.0 Lakhs (ADIP 100% bracket)
+          </button>
+          <button type="button" class="action-pill-btn income-preset-btn" data-income="240000">
+            ₹2.0L - ₹2.5 Lakhs (Scholarship ceiling)
+          </button>
+          <button type="button" class="action-pill-btn income-preset-btn" data-income="400000">
+            Above ₹2.5 Lakhs
+          </button>
+        </div>
+
+        <div style="margin-bottom: 32px;">
+          <label for="wizard-income" style="display: block; font-weight: 700; color: var(--primary-navy); margin-bottom: 8px;">
+            Exact Annual Income in INR (₹):
+          </label>
+          <input type="number" id="wizard-income" value="90000" min="0" step="5000" class="search-input" style="padding: 12px 18px; max-width: 250px;">
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <button type="button" class="btn-secondary-large" style="color:var(--text-main);" data-wizard-prev>
+            ← Back
+          </button>
+          <button type="button" class="btn-primary-large" data-wizard-next>
+            Next: Primary Need →
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4: Primary Need & Submit -->
+      <div class="wizard-step-panel" id="wizard-step-4" style="display: none;">
+        <h2 style="font-size: 1.35rem; color: var(--primary-navy); font-weight: 800; margin-bottom: 8px;">
+          Question 4: What is your primary objective today?
+        </h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 24px;">
+          Select what kind of assistance you or your family are actively looking for:
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 32px;">
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="radio" name="primary_need" value="All" checked>
+            <span style="font-weight: 600;">Show All Qualifying Schemes</span>
+          </label>
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="radio" name="primary_need" value="Assistive Devices">
+            <span style="font-weight: 600;">Assistive Devices (Wheelchair, Aids)</span>
+          </label>
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="radio" name="primary_need" value="Education & Scholarships">
+            <span style="font-weight: 600;">Scholarships & Higher Education</span>
+          </label>
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="radio" name="primary_need" value="Employment & Loans">
+            <span style="font-weight: 600;">Concessional Business Loan (NHFDC)</span>
+          </label>
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="radio" name="primary_need" value="Healthcare & Insurance">
+            <span style="font-weight: 600;">Health Insurance (Niramaya)</span>
+          </label>
+          <label style="border: 2px solid var(--border-light); border-radius: 12px; padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+            <input type="radio" name="primary_need" value="Financial Assistance">
+            <span style="font-weight: 600;">Monthly Disability Pension</span>
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: space-between;">
+          <button type="button" class="btn-secondary-large" style="color:var(--text-main);" data-wizard-prev>
+            ← Back
+          </button>
+          <button type="submit" class="btn-primary-large" style="background: #10b981;">
+            ✨ Calculate Matching Schemes
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Results Container -->
+  <div id="wizard-results-container" style="display: none;"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/wizard.js') }}"></script>
+{% endblock %}

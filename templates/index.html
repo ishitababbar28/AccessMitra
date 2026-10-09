@@ -1,0 +1,449 @@
+{% extends 'base.html' %}
+
+{% block title %}AccessMitra - Indian Government Disability & Welfare Schemes Portal{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" aria-labelledby="hero-title-main">
+  <div class="hero-overlay-grid"></div>
+  <div class="hero-content-wrap">
+    <div class="hero-text-col">
+      <div class="hero-badge-pill">
+        <span>🇮🇳</span> Official Indian Government Schemes & Disability Support Hub
+      </div>
+      <h1 class="hero-title" id="hero-title-main">
+        Bridging Accessibility, <br/>
+        <span class="hero-title-highlight">Empowering Every Divyangjan.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Access real, verified welfare schemes from the Ministry of Social Justice & Empowerment, DEPwD, ALIMCO, and National Trust. Transparent eligibility rules, simplified application workflows, and 24x7 verified helplines.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#schemes-explorer" class="btn-primary-large" id="hero-explore-btn">
+          <span>🔍</span> Explore 20+ Verified Schemes
+        </a>
+        <a href="{{ url_for('wizard_page') }}" class="btn-secondary-large">
+          <span>✨</span> Smart Eligibility Wizard
+        </a>
+      </div>
+
+      <div class="hero-stats-row">
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">{{ total_schemes }}+</span>
+          <span class="hero-stat-label">Verified Government Schemes</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">100%</span>
+          <span class="hero-stat-label">Official gov.in Sources</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">{{ total_helplines }}</span>
+          <span class="hero-stat-label">24x7 Verified Helplines</span>
+        </div>
+        <div class="hero-stat-item">
+          <span class="hero-stat-number">21</span>
+          <span class="hero-stat-label">RPwD Act Disabilities Covered</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-image-col">
+      <div class="hero-image-wrap">
+        <img src="{{ url_for('static', filename='images/hero_banner.jpg') }}" 
+             alt="Diverse Indian citizens with disabilities empowered by digital accessibility, tactile paving, and technology" 
+             class="hero-image">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Search & Filtering Section -->
+<section class="search-filter-section" id="schemes-explorer" aria-label="Search and Filter Welfare Schemes">
+  <div class="search-filter-card">
+    <!-- Search Bar -->
+    <div class="search-bar-primary">
+      <div class="search-input-wrap">
+        <svg class="search-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" 
+               id="scheme-search-input" 
+               class="search-input" 
+               placeholder="Search by scheme name, benefits, assistive device, or ministry (Press Alt+S)..." 
+               aria-label="Search schemes by keywords"
+               autocomplete="off">
+        <button class="search-clear-btn" id="search-clear-btn" aria-label="Clear search input" title="Clear search">✕</button>
+      </div>
+      <button class="search-action-btn" onclick="document.getElementById('scheme-search-input').dispatchEvent(new Event('input'))">
+        <span>Search</span>
+      </button>
+    </div>
+
+    <!-- Dropdown Filters Row -->
+    <div class="filter-controls-row">
+      <div class="filter-select-group">
+        <label for="filter-category" class="filter-label">
+          <span>📂</span> Category:
+        </label>
+        <select id="filter-category" class="filter-select">
+          <option value="all">All Categories</option>
+          {% for cat in categories %}
+          <option value="{{ cat }}">{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter-select-group">
+        <label for="filter-disability" class="filter-label">
+          <span>🎯</span> Target Disability:
+        </label>
+        <select id="filter-disability" class="filter-select">
+          <option value="all">All Disabilities</option>
+          <option value="Locomotor">Locomotor / Orthopaedic</option>
+          <option value="Visual">Visual Impairment / Blindness</option>
+          <option value="Hearing">Hearing & Speech Impairment</option>
+          <option value="Intellectual">Intellectual & Developmental</option>
+          <option value="Autism">Autism & Cerebral Palsy</option>
+          <option value="Multiple">Multiple Disabilities</option>
+        </select>
+      </div>
+
+      <div class="filter-select-group">
+        <label for="filter-level" class="filter-label">
+          <span>🏛️</span> Governance Level:
+        </label>
+        <select id="filter-level" class="filter-select">
+          <option value="all">All Levels</option>
+          <option value="Central">Central Government</option>
+          <option value="State">State Government</option>
+        </select>
+      </div>
+
+      <div class="filter-select-group">
+        <label for="filter-sort" class="filter-label">
+          <span>⚡</span> Sort By:
+        </label>
+        <select id="filter-sort" class="filter-select">
+          <option value="featured">Featured First</option>
+          <option value="name_asc">Name (A to Z)</option>
+          <option value="name_desc">Name (Z to A)</option>
+          <option value="newest">Recently Added</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Quick Category Chips -->
+    <div class="category-chips-wrap" role="group" aria-label="Quick Category Filters">
+      <span class="chip-label">Popular:</span>
+      <button class="category-chip active" data-category="all">All</button>
+      <button class="category-chip" data-category="Assistive Devices">Assistive Devices (ALIMCO)</button>
+      <button class="category-chip" data-category="Universal ID & Certification">UDID Card</button>
+      <button class="category-chip" data-category="Healthcare & Insurance">Niramaya Insurance</button>
+      <button class="category-chip" data-category="Education & Scholarships">Scholarships (NSP)</button>
+      <button class="category-chip" data-category="Employment & Loans">NHFDC Concessional Loans</button>
+      <button class="category-chip" data-category="Financial Assistance">Disability Pension (NSAP)</button>
+      <button class="category-chip" data-category="Legal Rights & Grievance">CCPD Legal Rights</button>
+    </div>
+  </div>
+</section>
+
+<!-- Schemes Explorer Results Grid -->
+<section class="content-section" aria-labelledby="schemes-heading">
+  <div class="section-header-row">
+    <div class="section-heading-group">
+      <h2 id="schemes-heading">Verified Government Welfare Schemes</h2>
+      <p class="section-subtext">Click on any scheme for step-by-step application guidance, eligibility rules, and official links.</p>
+    </div>
+    <div>
+      <span class="results-status-badge" id="results-counter" aria-live="polite">
+        Showing {{ featured_schemes|length }} verified schemes
+      </span>
+    </div>
+  </div>
+
+  <!-- Dynamic Scheme Cards Grid -->
+  <div class="schemes-grid" id="schemes-container">
+    {% for s in featured_schemes %}
+    <article class="scheme-card" data-scheme-id="{{ s.id }}" aria-labelledby="scheme-title-{{ s.id }}">
+      {% if s.is_featured %}
+      <div class="scheme-card-featured-bar" title="Featured Flagship Scheme"></div>
+      {% endif %}
+
+      <div class="card-top-meta">
+        <span class="card-category-badge">{{ s.category }}</span>
+        <span class="card-level-badge">{{ s.level }} Govt</span>
+      </div>
+
+      <div class="card-ministry">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 2L1 7v2h22V7L12 2zm10 18H2v2h20v-2zM4 10h3v8H4v-8zm6 0h4v8h-4v-8zm7 0h3v8h-3v-8z"/>
+        </svg>
+        <span>{{ s.ministry }}</span>
+      </div>
+
+      <h3 class="card-title" id="scheme-title-{{ s.id }}">
+        <a href="{{ url_for('scheme_detail', slug_or_id=s.slug) }}" onclick="event.preventDefault(); window.AccessMitraOpenModal({{ s.id }});">
+          {{ s.name }}
+        </a>
+      </h3>
+
+      <p class="card-description">{{ s.brief_description }}</p>
+
+      <div class="card-eligibility-summary">
+        <div><strong>Disability:</strong> {{ s.target_disability }} ({{ s.min_disability_pct }}%+ min)</div>
+        <div>
+          <strong>Income:</strong> 
+          {% if s.max_annual_income > 0 %}
+          Annual Income ≤ ₹{{ "{:,}".format(s.max_annual_income) }}
+          {% else %}
+          Open to All Income Groups
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card-tags-row">
+        <span class="card-tag">🎯 {{ s.target_disability }}</span>
+        {% if s.helpline_number %}
+        <span class="card-tag" style="background:#ecfdf5; color:#047857; font-weight:700;">📞 {{ s.helpline_number }}</span>
+        {% endif %}
+      </div>
+
+      <div class="card-actions-row">
+        <button class="btn-card-details" onclick="window.AccessMitraOpenModal({{ s.id }})" aria-label="View complete details of {{ s.name }}">
+          View Details
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+
+        <div class="card-icon-actions">
+          <button class="btn-icon-action" onclick="window.AccessMitraReadCard({{ s.id }})" title="Listen to scheme details aloud" aria-label="Listen to scheme summary">
+            🔊
+          </button>
+          <button class="btn-icon-action" data-bookmark-id="{{ s.id }}" onclick="window.AccessMitraToggleBookmark({{ s.id }}, '{{ s.name }}')" title="Save Scheme" aria-label="Bookmark scheme">
+            🔖
+          </button>
+          <a href="{{ s.official_portal_url }}" target="_blank" rel="noopener noreferrer" class="btn-icon-action" title="Visit official government portal (opens in new tab)" aria-label="Official Portal for {{ s.name }}">
+            ↗
+          </a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Verified Helplines Spotlight -->
+<section class="content-section" style="padding-top: 20px;" aria-labelledby="helplines-spotlight-heading">
+  <div class="section-header-row">
+    <div class="section-heading-group">
+      <h2 id="helplines-spotlight-heading">Verified Emergency & National Helplines</h2>
+      <p class="section-subtext">Direct government toll-free telephone support available in multiple regional Indian languages.</p>
+    </div>
+    <a href="{{ url_for('helplines_page') }}" class="btn-card-details" style="background: var(--primary-navy);">
+      View All Helplines & Authorities →
+    </a>
+  </div>
+
+  <div class="helplines-cards-grid">
+    {% for h in helplines %}
+    <div class="helpline-card">
+      <span style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase;">
+        {{ h.category }}
+      </span>
+      <h3 style="font-size: 1.15rem; color: var(--primary-navy); margin: 6px 0;">
+        {{ h.name }}
+      </h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; flex: 1;">
+        {{ h.services }}
+      </p>
+      <div style="font-size: 0.8rem; color: var(--text-subtle); margin-bottom: 6px;">
+        🕒 <strong>Hours:</strong> {{ h.operational_hours }}
+      </div>
+      <div style="font-size: 0.8rem; color: var(--text-subtle); margin-bottom: 12px;">
+        🗣️ <strong>Languages:</strong> {{ h.languages }}
+      </div>
+      <a href="tel:{{ h.phone_number }}" class="helpline-phone-btn" aria-label="Call {{ h.name }} at {{ h.phone_number }}">
+        📞 Call {{ h.phone_number }}
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Digital Accessibility Tools Spotlight -->
+<section class="content-section" style="padding-top: 20px;" aria-labelledby="tools-spotlight-heading">
+  <div class="section-header-row">
+    <div class="section-heading-group">
+      <h2 id="tools-spotlight-heading">Empowering Digital Accessibility Tools</h2>
+      <p class="section-subtext">Free assistive software, digital libraries, and national communication tools.</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+    {% for res in resources %}
+    <div style="background: var(--surface-white); border: 1px solid var(--border-light); border-radius: var(--border-radius-md); padding: 22px; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);">
+      <span style="font-size: 0.75rem; font-weight: 700; color: var(--saffron-orange); text-transform: uppercase;">
+        {{ res.type }}
+      </span>
+      <h3 style="font-size: 1.15rem; color: var(--primary-navy); margin: 8px 0;">
+        {{ res.title }}
+      </h3>
+      <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; flex: 1;">
+        {{ res.description }}
+      </p>
+      <div style="font-size: 0.8rem; color: var(--text-subtle); margin-bottom: 12px;">
+        💻 <strong>Platform:</strong> {{ res.platform }} • <span style="color:#047857; font-weight:700;">{{ res.cost }}</span>
+      </div>
+      <a href="{{ res.official_link }}" target="_blank" rel="noopener noreferrer" class="btn-card-details" style="background:#0f172a; justify-content:center;">
+        Access Resource ↗
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Accessible Feedback & Grievance Form Section -->
+<section class="content-section" style="padding-top: 20px;" aria-labelledby="feedback-heading">
+  <div style="background: var(--surface-white); border-radius: var(--border-radius-lg); border: 1px solid var(--border-light); padding: 36px; box-shadow: var(--shadow-md);">
+    <div style="max-width: 700px;">
+      <h2 id="feedback-heading" style="font-size: 1.6rem; color: var(--primary-navy); margin-bottom: 8px;">
+        Accessibility Feedback & Scheme Inquiry
+      </h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">
+        Notice an inaccessible element or need assistance with a government portal application? Submit your query directly to our team.
+      </p>
+
+      <form id="feedback-form" onsubmit="event.preventDefault(); submitFeedback();">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <label for="fb-name" style="display:block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Your Name (Optional)</label>
+            <input type="text" id="fb-name" class="search-input" style="padding: 10px 14px; font-size: 0.95rem;" placeholder="e.g. Ramesh Kumar">
+          </div>
+          <div>
+            <label for="fb-email" style="display:block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Email or Mobile Number</label>
+            <input type="text" id="fb-email" class="search-input" style="padding: 10px 14px; font-size: 0.95rem;" placeholder="contact@example.com">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label for="fb-type" style="display:block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Inquiry Type</label>
+          <select id="fb-type" class="filter-select" style="width: 100%;">
+            <option value="Scheme Application Help">Assistance with Scheme Application</option>
+            <option value="Accessibility Barrier Report">Report Digital/Physical Accessibility Issue</option>
+            <option value="UDID Inquiry">UDID Card / Certificate Question</option>
+            <option value="General Suggestion">General Portal Feedback</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label for="fb-subject" style="display:block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Subject <span style="color:red;">*</span></label>
+          <input type="text" id="fb-subject" required class="search-input" style="padding: 10px 14px; font-size: 0.95rem;" placeholder="Brief topic of your inquiry">
+        </div>
+
+        <div style="margin-bottom: 20px;">
+          <label for="fb-message" style="display:block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Detailed Message <span style="color:red;">*</span></label>
+          <textarea id="fb-message" required rows="4" class="search-input" style="padding: 12px 14px; font-size: 0.95rem; border-radius: 8px; resize: vertical;" placeholder="Describe your inquiry, scheme question, or accessibility feedback..."></textarea>
+        </div>
+
+        <div id="fb-status-msg" style="margin-bottom: 16px; display: none;"></div>
+
+        <button type="submit" class="btn-primary-large" id="fb-submit-btn" style="padding: 12px 32px;">
+          Submit Inquiry / Feedback
+        </button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Reusable Accessible Scheme Detail Modal -->
+<div class="modal-backdrop" id="modal-scheme-detail" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div>
+        <span id="modal-category" style="font-size: 0.8rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase;">Category</span>
+        <h3 id="modal-title">Scheme Full Name</h3>
+        <div id="modal-ministry" style="font-size: 0.85rem; color: var(--text-subtle); margin-top: 4px;">Ministry Name</div>
+      </div>
+      <button class="modal-close-btn" onclick="window.AccessMitraCloseModal()" aria-label="Close scheme details modal">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Injected via JavaScript -->
+    </div>
+
+    <div class="modal-footer">
+      <div style="display: flex; gap: 10px;">
+        <button class="action-pill-btn" id="modal-listen-btn" style="background:#0f172a; color:#fff;" title="Listen to this entire scheme aloud">
+          🔊 Listen (Audio)
+        </button>
+        <button class="action-pill-btn" onclick="window.AccessMitraPrintModal()" style="background:#e2e8f0; color:#0f172a;" title="Print this scheme summary">
+          🖨️ Print Details
+        </button>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="btn-secondary-large" onclick="window.AccessMitraCloseModal()" style="color:var(--text-main); border-color:var(--border-strong); padding: 8px 18px; font-size:0.9rem;">
+          Close
+        </button>
+        <a id="modal-apply-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-card-details" style="background:#ea580c; padding: 10px 22px; font-size:0.95rem;">
+          Apply on Official Portal ↗
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function submitFeedback() {
+  const name = document.getElementById('fb-name').value;
+  const email = document.getElementById('fb-email').value;
+  const type = document.getElementById('fb-type').value;
+  const subject = document.getElementById('fb-subject').value;
+  const message = document.getElementById('fb-message').value;
+  const statusDiv = document.getElementById('fb-status-msg');
+  const submitBtn = document.getElementById('fb-submit-btn');
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_name: name,
+        user_email: email,
+        feedback_type: type,
+        subject: subject,
+        message: message,
+        accessibility_mode: document.body.className || 'Standard'
+      })
+    });
+    const result = await res.json();
+    if (result.status === 'success') {
+      statusDiv.style.display = 'block';
+      statusDiv.style.color = '#047857';
+      statusDiv.style.background = '#ecfdf5';
+      statusDiv.style.padding = '12px';
+      statusDiv.style.borderRadius = '8px';
+      statusDiv.textContent = result.message;
+      document.getElementById('feedback-form').reset();
+    } else {
+      statusDiv.style.display = 'block';
+      statusDiv.style.color = '#b91c1c';
+      statusDiv.textContent = result.message || 'Error submitting feedback.';
+    }
+  } catch (err) {
+    statusDiv.style.display = 'block';
+    statusDiv.style.color = '#b91c1c';
+    statusDiv.textContent = 'Network error submitting feedback.';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Inquiry / Feedback';
+  }
+}
+</script>
+{% endblock %}

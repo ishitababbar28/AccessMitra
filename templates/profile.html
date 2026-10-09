@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}My Dashboard | AccessMitra{% endblock %}
+
+{% block content %}
+<section class="dashboard-page" aria-labelledby="dashboard-title">
+  <div class="dashboard-hero">
+    <div>
+      <span class="auth-kicker">Your AccessMitra dashboard</span>
+      <h2 id="dashboard-title">Hello, {{ user.name.split(' ')[0] }}.</h2>
+      <p>Pick up where you left off and keep the support that matters close at hand.</p>
+    </div>
+    <a href="{{ url_for('schemes_page') }}" class="dashboard-primary-action">Explore schemes <span aria-hidden="true">→</span></a>
+  </div>
+
+  <div class="dashboard-grid">
+    <article class="dashboard-panel dashboard-panel-featured">
+      <span class="panel-eyebrow">Personal space</span>
+      <h3>Saved schemes</h3>
+      <p>{{ saved_schemes|length }} scheme{% if saved_schemes|length != 1 %}s{% endif %} saved for quick access.</p>
+      <a href="{{ url_for('bookmarks_page') }}" class="panel-link">Open My Saved Schemes <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="dashboard-panel">
+      <span class="panel-eyebrow">Fast start</span>
+      <h3>Find your matches</h3>
+      <p>Answer a few questions and see schemes that fit your situation.</p>
+      <a href="{{ url_for('wizard_page') }}" class="panel-link">Open eligibility wizard <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="dashboard-panel">
+      <span class="panel-eyebrow">Account</span>
+      <h3>{{ user.email }}</h3>
+      <p>Your accessibility preferences and profile details are ready to update.</p>
+      <a href="#profile-details" class="panel-link">View account details <span aria-hidden="true">↓</span></a>
+    </article>
+  </div>
+
+  <section class="profile-details" id="profile-details" aria-labelledby="profile-details-title">
+    <div>
+      <span class="panel-eyebrow">Account details</span>
+      <h3 id="profile-details-title">Your profile</h3>
+      <p>Keep your contact information current for a smoother experience.</p>
+    </div>
+    <dl class="profile-detail-list">
+      <div><dt>Name</dt><dd>{{ user.name }}</dd></div>
+      <div><dt>Email</dt><dd>{{ user.email }}</dd></div>
+      <div><dt>Phone</dt><dd>{{ user.phone or 'Not added' }}</dd></div>
+    </dl>
+    <a href="{{ url_for('logout') }}" class="dashboard-secondary-action">Sign out</a>
+  </section>
+</section>
+{% endblock %}

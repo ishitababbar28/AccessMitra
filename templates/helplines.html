@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Verified Helplines & Grievance Directory - AccessMitra{% endblock %}
+
+{% block content %}
+<div class="content-section" style="padding-top: 40px;">
+  <!-- Header -->
+  <div style="margin-bottom: 36px;">
+    <span style="background: #fef2f2; color: #991b1b; font-weight: 800; font-size: 0.85rem; padding: 6px 16px; border-radius: 9999px; text-transform: uppercase;">
+      Official & Verified 24x7 Support
+    </span>
+    <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: var(--primary-navy); margin-top: 12px; margin-bottom: 8px;">
+      Verified National Helplines & Redressal Directory
+    </h1>
+    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 750px;">
+      Direct, official telephone helplines across Indian ministries for emergency assistance, mental health support, assistive equipment tracking, UDID inquiries, and statutory grievance authorities.
+    </p>
+  </div>
+
+  <!-- Helplines Grid -->
+  <section style="margin-bottom: 50px;" aria-labelledby="helplines-grid-heading">
+    <h2 id="helplines-grid-heading" style="font-size: 1.5rem; color: var(--primary-navy); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+      <span>📞</span> National Toll-Free Support Lines
+    </h2>
+
+    <div class="helplines-cards-grid">
+      {% for h in helplines %}
+      <div class="helpline-card" style="border-top: 4px solid var(--primary-blue);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 0.75rem; font-weight: 700; color: #1d4ed8; text-transform: uppercase;">
+            {{ h.category }}
+          </span>
+          {% if h.toll_free %}
+          <span style="background: #ecfdf5; color: #047857; font-size: 0.72rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px;">
+            100% Toll-Free
+          </span>
+          {% endif %}
+        </div>
+
+        <h3 style="font-size: 1.2rem; color: var(--primary-navy); margin-bottom: 6px;">
+          {{ h.name }}
+        </h3>
+        <div style="font-size: 0.8rem; color: var(--text-subtle); margin-bottom: 12px;">
+          🏛️ {{ h.department }}
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; flex: 1;">
+          {{ h.services }}
+        </p>
+
+        <div style="font-size: 0.8rem; color: var(--text-main); margin-bottom: 6px;">
+          🕒 <strong>Hours:</strong> {{ h.operational_hours }}
+        </div>
+        <div style="font-size: 0.8rem; color: var(--text-main); margin-bottom: 16px;">
+          🗣️ <strong>Languages:</strong> {{ h.languages }}
+        </div>
+
+        <a href="tel:{{ h.phone_number.split('/')[0].strip().replace(' ', '') }}" class="helpline-phone-btn" aria-label="Call {{ h.name }} at {{ h.phone_number }}">
+          📞 Dial {{ h.phone_number }}
+        </a>
+
+        {% if h.official_url %}
+        <div style="margin-top: 10px; text-align: center;">
+          <a href="{{ h.official_url }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; color: var(--primary-blue); font-weight: 600;">
+            Visit Official Portal ↗
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Grievance Authorities Section -->
+  <section aria-labelledby="authorities-heading">
+    <h2 id="authorities-heading" style="font-size: 1.5rem; color: var(--primary-navy); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+      <span>⚖️</span> Statutory Grievance & Redressal Authorities
+    </h2>
+    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 24px;">
+      Under Sections 75 & 80 of the Rights of Persons with Disabilities (RPwD) Act 2016, these authorities have the powers of a Civil Court to summon entities, investigate discrimination, and enforce compliance.
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      {% for a in authorities %}
+      <div style="background: var(--surface-white); border: 1px solid var(--border-light); border-radius: var(--border-radius-md); padding: 24px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column;">
+        <span style="font-size: 0.75rem; font-weight: 700; color: #b45309; background: #fef3c7; padding: 3px 10px; border-radius: 9999px; align-self: flex-start; margin-bottom: 10px;">
+          {{ a.act_reference }}
+        </span>
+
+        <h3 style="font-size: 1.25rem; color: var(--primary-navy); font-weight: 700; margin-bottom: 6px;">
+          {{ a.name }}
+        </h3>
+
+        <div style="font-size: 0.85rem; color: var(--primary-blue); font-weight: 600; margin-bottom: 12px;">
+          {{ a.official_designation }}
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; flex: 1;">
+          <div><strong>Jurisdiction:</strong> {{ a.jurisdiction }}</div>
+          <div><strong>Email:</strong> <a href="mailto:{{ a.email }}" style="color:var(--primary-blue);">{{ a.email }}</a></div>
+          <div><strong>Phone:</strong> {{ a.phone }}</div>
+          <div style="margin-top: 6px;"><strong>Office:</strong> {{ a.address }}</div>
+        </div>
+
+        <a href="{{ a.portal_url }}" target="_blank" rel="noopener noreferrer" class="btn-card-details" style="background:#0f172a; justify-content:center;">
+          File Complaint / Visit Portal ↗
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

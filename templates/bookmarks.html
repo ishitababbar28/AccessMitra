@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}My Saved Schemes (Mera Pitara) - AccessMitra{% endblock %}
+
+{% block content %}
+<div class="content-section" style="padding-top: 40px;">
+  <!-- Header -->
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span style="background: #fff7ed; color: #ea580c; font-weight: 800; font-size: 0.85rem; padding: 6px 16px; border-radius: 9999px; text-transform: uppercase;">
+        Personal Welfare Portfolio
+      </span>
+      <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: var(--primary-navy); margin-top: 12px; margin-bottom: 6px;">
+        My Saved Schemes (मेरा पिटारा)
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1rem;">
+        Your bookmarked schemes saved locally on your device for easy review and offline application preparation.
+      </p>
+    </div>
+
+    <div style="display: flex; gap: 12px;">
+      <button class="action-pill-btn" onclick="window.print()" style="background:#0f172a; color:#fff;" title="Print your saved schemes checklist">
+        🖨️ Print Checklist
+      </button>
+      <button class="action-pill-btn" onclick="clearAllBookmarks()" style="background:#fee2e2; color:#b91c1c; border-color:#fca5a5;" title="Clear all saved schemes">
+        🗑️ Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- Bookmarks Container -->
+  <div id="bookmarks-container" style="display: grid; gap: 24px;">
+    <div style="text-align: center; padding: 60px; color: var(--text-muted);">
+      <div style="font-size: 2.5rem; margin-bottom: 12px;">⏳</div>
+      <p>Loading your saved schemes...</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const container = document.getElementById('bookmarks-container');
+  const savedIds = JSON.parse(localStorage.getItem('accessmitra_saved_schemes') || '[]');
+
+  if (savedIds.length === 0) {
+    container.innerHTML = `
+      <div style="background: var(--surface-white); border: 2px dashed var(--border-strong); border-radius: var(--border-radius-md); padding: 60px 24px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 16px;">🔖</div>
+        <h3 style="font-size: 1.35rem; color: var(--primary-navy); margin-bottom: 8px;">No Saved Schemes Yet</h3>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 24px;">
+          As you browse through verified welfare initiatives, tap the bookmark icon on any card to save it here for quick reference!
+        </p>
+        <a href="{{ url_for('index') }}" class="btn-primary-large">
+          Explore Government Schemes
+        </a>
+      </div>
+    `;
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/schemes?sort=name_asc');
+    const data = await res.json();
+    if (data.status === 'success') {
+      const savedSchemes = data.data.filter(s => savedIds.includes(s.id));
+      renderSavedList(savedSchemes);
+    }
+  } catch (err) {
+    container.innerHTML = `<div style="color:red; padding:20px;">Error loading saved schemes.</div>`;
+  }
+});
+
+function renderSavedList(schemes) {
+  const container = document.getElementById('bookmarks-container');
+  if (schemes.length === 0) {
+    container.innerHTML = `<p>No matching saved schemes found.</p>`;
+    return;
+  }
+
+  container.innerHTML = schemes.map(s => `
+    <div style="background: var(--surface-white); border-radius: 14px; border: 1px solid var(--border-light); padding: 24px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap;">
+        <div>
+          <span class="card-category-badge">${s.category}</span>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--primary-navy); margin-top: 6px;">
+            ${s.name}
+          </h3>
+          <div style="font-size: 0.85rem; color: var(--text-subtle);">${s.ministry}</div>
+        </div>
+        <button class="action-pill-btn" onclick="removeSingleBookmark(${s.id})" style="background: #fee2e2; color: #b91c1c; border-color: #fca5a5;">
+          ✕ Remove
+        </button>
+      </div>
+
+      <p style="font-size: 0.95rem; color: var(--text-main); line-height: 1.6;">
+        ${s.brief_description}
+      </p>
+
+      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary-blue); font-size: 0.85rem;">
+        <strong>Eligibility Summary:</strong> ${s.target_disability} • Min ${s.min_disability_pct}% disability • 
+        ${s.max_annual_income > 0 ? `Max Income ₹${s.max_annual_income.toLocaleString('en-IN')}` : 'No Income Ceiling'}
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding-top: 10px; border-top: 1px solid var(--border-light);">
+        <div style="display: flex; gap: 8px;">
+          <a href="/scheme/${s.slug}" class="btn-card-details">
+            View Complete Scheme Details →
+          </a>
+          <button class="action-pill-btn" onclick="window.AccessMitra.speak('${s.name}. ${s.brief_description}', '${s.name}')" style="background:#0f172a; color:#fff;">
+            🔊 Listen
+          </button>
+        </div>
+        <a href="${s.application_url || s.official_portal_url}" target="_blank" rel="noopener noreferrer" class="btn-card-details" style="background: #ea580c;">
+          Official Portal Apply ↗
+        </a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeSingleBookmark(id) {
+  let saved = JSON.parse(localStorage.getItem('accessmitra_saved_schemes') || '[]');
+  saved = saved.filter(item => item !== id);
+  localStorage.setItem('accessmitra_saved_schemes', JSON.stringify(saved));
+  location.reload();
+}
+
+function clearAllBookmarks() {
+  if (confirm('Are you sure you want to clear all your saved schemes?')) {
+    localStorage.removeItem('accessmitra_saved_schemes');
+    location.reload();
+  }
+}
+</script>
+{% endblock %}

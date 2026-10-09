@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ scheme.name }} - AccessMitra Government Scheme Details{% endblock %}
+
+{% block content %}
+<div class="content-section" style="padding-top: 40px;">
+  <!-- Breadcrumb navigation -->
+  <nav aria-label="Breadcrumb" style="margin-bottom: 20px; font-size: 0.85rem; color: var(--text-muted);">
+    <a href="{{ url_for('index') }}" style="color: var(--primary-blue); text-decoration: none;">Home</a>
+    <span> / </span>
+    <span>{{ scheme.category }}</span>
+    <span> / </span>
+    <span aria-current="page" style="color: var(--text-main); font-weight: 600;">{{ scheme.name }}</span>
+  </nav>
+
+  <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 32px; align-items: start;">
+    <!-- Main Scheme Details -->
+    <article style="background: var(--surface-white); border-radius: var(--border-radius-lg); border: 1px solid var(--border-light); padding: 36px; box-shadow: var(--shadow-sm);">
+      <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+        <span class="card-category-badge">{{ scheme.category }}</span>
+        <span class="card-level-badge">{{ scheme.level }} Government</span>
+        {% if scheme.is_featured %}
+        <span style="background: #fef3c7; color: #b45309; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+          ★ Flagship Initiative
+        </span>
+        {% endif %}
+      </div>
+
+      <h1 style="font-family: var(--font-heading); font-size: 2.1rem; font-weight: 800; color: var(--primary-navy); line-height: 1.25; margin-bottom: 12px;">
+        {{ scheme.name }}
+      </h1>
+
+      <div style="font-size: 0.95rem; color: var(--text-subtle); margin-bottom: 24px; display: flex; align-items: center; gap: 8px;">
+        <span>🏛️ <strong>Ministry:</strong> {{ scheme.ministry }}</span>
+        {% if scheme.implementing_agency %}
+        <span>• <strong>Agency:</strong> {{ scheme.implementing_agency }}</span>
+        {% endif %}
+      </div>
+
+      <!-- Quick Audio & Action Bar -->
+      <div style="display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; background: #f8fafc; padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
+        <button class="action-pill-btn" onclick="readFullSchemePage()" style="background:#0f172a; color:#fff;" aria-label="Listen to scheme details aloud">
+          🔊 Listen to Details
+        </button>
+        <button class="action-pill-btn" onclick="window.print()" style="background:#e2e8f0; color:#0f172a;" aria-label="Print this scheme guide">
+          🖨️ Print Scheme Guide
+        </button>
+        <button class="action-pill-btn" data-bookmark-id="{{ scheme.id }}" onclick="window.AccessMitraToggleBookmark({{ scheme.id }}, '{{ scheme.name }}')" style="background:#e2e8f0; color:#0f172a;">
+          🔖 Save to My Schemes
+        </button>
+      </div>
+
+      <!-- Overview Box -->
+      <div style="background: #eff6ff; border-left: 4px solid #1d4ed8; padding: 20px; border-radius: 0 12px 12px 0; margin-bottom: 32px;">
+        <h3 style="font-size: 1.1rem; color: #1e3a8a; margin-bottom: 8px;">Overview & Purpose</h3>
+        <p style="font-size: 1.05rem; color: var(--text-main); line-height: 1.6;">
+          {{ scheme.brief_description }}
+        </p>
+      </div>
+
+      <!-- Key Benefits -->
+      <section style="margin-bottom: 32px;" aria-labelledby="benefits-title">
+        <h2 id="benefits-title" class="modal-section-title">
+          <span>🎁</span> Key Benefits & Financial Entitlements
+        </h2>
+        <div style="white-space: pre-line; color: var(--text-main); font-size: 1rem; line-height: 1.7;">
+          {{ scheme.benefits }}
+        </div>
+      </section>
+
+      <!-- Eligibility Criteria -->
+      <section style="margin-bottom: 32px;" aria-labelledby="eligibility-title">
+        <h2 id="eligibility-title" class="modal-section-title">
+          <span>📋</span> Eligibility Rules & Criteria
+        </h2>
+        <div style="white-space: pre-line; color: var(--text-main); font-size: 1rem; line-height: 1.7;">
+          {{ scheme.eligibility }}
+        </div>
+      </section>
+
+      <!-- Step by Step Application Guide -->
+      <section style="margin-bottom: 32px;" aria-labelledby="process-title">
+        <h2 id="process-title" class="modal-section-title">
+          <span>📝</span> Step-by-Step Application Workflow
+        </h2>
+        <div style="white-space: pre-line; color: var(--text-main); font-size: 1rem; line-height: 1.7; background: #fffbeb; padding: 20px; border-radius: 10px; border-left: 4px solid #f59e0b;">
+          {{ scheme.application_process }}
+        </div>
+      </section>
+
+      <!-- Required Documents -->
+      <section style="margin-bottom: 32px;" aria-labelledby="docs-title">
+        <h2 id="docs-title" class="modal-section-title">
+          <span>📂</span> Mandatory Documents Checklist
+        </h2>
+        <div style="white-space: pre-line; color: var(--text-muted); font-size: 1rem; line-height: 1.7;">
+          {{ scheme.documents_required }}
+        </div>
+      </section>
+
+      <!-- Official Contact & Helpdesk -->
+      <section style="margin-bottom: 24px;" aria-labelledby="contact-title">
+        <h2 id="contact-title" class="modal-section-title">
+          <span>📞</span> Official Helpdesk & Grievance Contact
+        </h2>
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-main);">
+          {{ scheme.contact_details }}
+        </p>
+        {% if scheme.helpline_number %}
+        <div style="margin-top: 14px;">
+          <a href="tel:{{ scheme.helpline_number.replace(' ', '') }}" class="helpline-phone-btn" style="display:inline-flex;">
+            📞 Call Official Helpline: {{ scheme.helpline_number }}
+          </a>
+        </div>
+        {% endif %}
+      </section>
+    </article>
+
+    <!-- Sidebar Sticky Box -->
+    <aside style="position: sticky; top: 90px; display: flex; flex-direction: column; gap: 24px;">
+      <!-- Action Card -->
+      <div style="background: var(--surface-white); border-radius: var(--border-radius-md); border: 1px solid var(--border-light); padding: 24px; box-shadow: var(--shadow-md);">
+        <h3 style="font-size: 1.2rem; color: var(--primary-navy); margin-bottom: 12px;">Official Application Link</h3>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+          Access the verified government portal to register, fill online forms, or download offline application formats.
+        </p>
+        <a href="{{ scheme.application_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary-large" style="width: 100%; justify-content: center; text-align: center;">
+          Apply on myScheme / Portal ↗
+        </a>
+        <div style="margin-top: 12px; text-align: center;">
+          <a href="{{ scheme.official_portal_url }}" target="_blank" rel="noopener noreferrer" style="font-size: 0.82rem; color: var(--primary-blue); font-weight: 600;">
+            Visit Ministry Portal ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Summary Card -->
+      <div style="background: var(--surface-white); border-radius: var(--border-radius-md); border: 1px solid var(--border-light); padding: 24px;">
+        <h4 style="font-size: 1rem; color: var(--primary-navy); margin-bottom: 14px; border-bottom: 1px solid var(--border-light); padding-bottom: 8px;">
+          Quick Criteria Summary
+        </h4>
+        <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 10px; color: var(--text-main);">
+          <div><strong>Target Group:</strong> {{ scheme.target_disability }}</div>
+          <div><strong>Min Disability:</strong> {{ scheme.min_disability_pct }}% or valid UDID</div>
+          <div>
+            <strong>Income Ceiling:</strong> 
+            {% if scheme.max_annual_income > 0 %}
+            ₹{{ "{:,}".format(scheme.max_annual_income) }}/yr
+            {% else %}
+            No Limit (Universal)
+            {% endif %}
+          </div>
+          <div><strong>Age Range:</strong> {{ scheme.min_age }} to {{ scheme.max_age }} years</div>
+          <div><strong>Level:</strong> {{ scheme.level }} Govt ({{ scheme.state_name }})</div>
+        </div>
+      </div>
+
+      <!-- Related Schemes -->
+      {% if related_schemes %}
+      <div style="background: var(--surface-white); border-radius: var(--border-radius-md); border: 1px solid var(--border-light); padding: 24px;">
+        <h4 style="font-size: 1rem; color: var(--primary-navy); margin-bottom: 12px;">Related in {{ scheme.category }}</h4>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          {% for rel in related_schemes %}
+          <div style="border-bottom: 1px solid var(--border-light); padding-bottom: 10px;">
+            <a href="{{ url_for('scheme_detail', slug_or_id=rel.slug) }}" style="font-weight: 700; color: var(--primary-blue); text-decoration: none; font-size: 0.9rem;">
+              {{ rel.name }}
+            </a>
+            <div style="font-size: 0.8rem; color: var(--text-subtle); margin-top: 4px;">{{ rel.target_disability }}</div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function readFullSchemePage() {
+  const title = "{{ scheme.name }}";
+  const desc = "{{ scheme.brief_description }}";
+  const benefits = `Key benefits: {{ scheme.benefits|replace('\n', ' ')|replace('"', '') }}`;
+  const text = `${title}. ${desc}. ${benefits}`;
+  if (window.AccessMitra) {
+    window.AccessMitra.speak(text, title);
+  }
+}
+</script>
+{% endblock %}
