@@ -1,4 +1,4 @@
-# AccessMitra (एक्सेस मित्र)
+# AccessMitra 
 ### National Accessibility & Disability Welfare Portal for India
 
 **AccessMitra** is an accessibility-focused, full-stack web application designed to connect Indian citizens with disabilities (*Divyangjan*), their families, caregivers, and social advocates to verified Central and State Government welfare schemes, assistive technologies, digital resources, and 24x7 verified emergency helplines.
@@ -21,7 +21,7 @@ AccessMitra strictly uses **real, authenticated government data** verified again
 
 ---
 
-## 🛠️ Technology Stack
+##  Technology Stack
 
 - **Backend**: Python 3.13 / Flask 3.1.0, SQLAlchemy 2.0, PyMySQL
 - **Database**: 
@@ -32,7 +32,7 @@ AccessMitra strictly uses **real, authenticated government data** verified again
 
 ---
 
-## ♿ Accessibility Features (WCAG 2.1 AA/AAA & GIGW Compliant)
+##  Accessibility Features (WCAG 2.1 AA/AAA & GIGW Compliant)
 
 1. **Universal Accessibility Toolbar**:
    - **Text Size Adjustment**: Default (`A`), Large (`A+` / +15%), Extra Large (`A++` / +30%).
@@ -58,7 +58,7 @@ AccessMitra strictly uses **real, authenticated government data** verified again
 
 ---
 
-## 📋 Key Portal Features
+##  Key Portal Features
 
 1. **Searchable & Filterable Scheme Explorer**:
    - Instant search across scheme name, ministry, target disability, eligibility, and benefits.
@@ -78,7 +78,7 @@ AccessMitra strictly uses **real, authenticated government data** verified again
 
 ---
 
-## 🚀 How to Run AccessMitra
+##  How to Run AccessMitra
 
 ### 1. Install Dependencies
 ```bash
@@ -117,7 +117,7 @@ Open your browser and navigate to:
 
 ---
 
-## 📡 REST API Reference
+##  REST API Reference
 
 | Endpoint | Method | Description |
 |---|---|---|
